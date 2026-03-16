@@ -29,7 +29,7 @@ import { OrgPermissionBillingActions, OrgPermissionSubjects } from "../permissio
 import { TPermissionServiceFactory } from "../permission/permission-service-types";
 import { BillingPlanRows, BillingPlanTableHead } from "./licence-enums";
 import { TLicenseDALFactory } from "./license-dal";
-import { getDefaultOnPremFeatures, getLicenseKeyConfig, setupLicenseRequestWithStore } from "./license-fns";
+import { getAllFeaturesEnabled, getDefaultOnPremFeatures, getLicenseKeyConfig, setupLicenseRequestWithStore } from "./license-fns";
 import {
   InstanceType,
   LicenseType,
@@ -66,6 +66,7 @@ type TLicenseServiceFactoryDep = {
     | "LICENSE_SERVER_V2_MODE"
     | "LICENSE_SERVER_V2_SERVICE_KEY"
     | "DISABLE_LICENSE_V1_CLOUD"
+    | "ENTERPRISE_BYPASS"
   >;
   orgDAL: Pick<TOrgDALFactory, "findRootOrgDetails" | "countAllOrgMembers" | "findById">;
   permissionService: Pick<TPermissionServiceFactory, "getOrgPermission">;
@@ -137,6 +138,14 @@ export const licenseServiceFactory = ({
 
   const init = async () => {
     try {
+      if (envConfig.ENTERPRISE_BYPASS) {
+        onPremFeatures = getAllFeaturesEnabled();
+        instanceType = InstanceType.EnterpriseOnPremOffline;
+        isValidLicense = true;
+        logger.info("Enterprise bypass enabled - all features unlocked");
+        return;
+      }
+
       if (envConfig.LICENSE_SERVER_V2_SERVICE_KEY) {
         instanceType = InstanceType.Cloud;
         logger.info(`Instance type: ${InstanceType.Cloud}`);

@@ -405,6 +405,7 @@ const envSchema = z
     // When true, new checkouts (adding a payment method) and trials on License Server v1 cloud are
     // disallowed, pushing orgs onto License Server v2.
     DISABLE_LICENSE_V1_CLOUD: zodStrBool.default("false"),
+    ENTERPRISE_BYPASS: zodStrBool.default("false"),
 
     // GENERIC
     STANDALONE_MODE: z
