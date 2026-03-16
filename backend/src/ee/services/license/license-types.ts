@@ -56,85 +56,85 @@ export type TFeatureSet = {
   // True when features are sourced from an offline (air-gapped) license; the billing UI renders a
   // read-only offline banner instead of the live billing surface.
   isOffline?: boolean;
-  tier: -1;
+  tier: number;
   workspaceLimit: null;
   workspacesUsed: number;
-  dynamicSecret: false;
+  dynamicSecret: boolean;
   memberLimit: null;
   identityLimit: null;
   enforceIdentityLimit?: boolean;
-  subOrganization: false;
+  subOrganization: boolean;
   environmentLimit: null;
-  environmentsUsed: 0;
-  secretVersioning: true;
-  pitRecovery: false;
-  ipAllowlisting: false;
-  rbac: false;
-  customRateLimits: false;
-  customAlerts: false;
-  auditLogs: false;
-  auditLogsRetentionDays: 0;
-  auditLogStreams: false;
-  auditLogStreamLimit: 3;
-  githubOrgSync: false;
-  samlSSO: false;
-  enforceGoogleSSO: false;
-  hsm: false;
-  oidcSSO: false;
-  secretAccessInsights: false;
-  scim: false;
-  ldap: false;
-  groups: false;
+  environmentsUsed: number;
+  secretVersioning: boolean;
+  pitRecovery: boolean;
+  ipAllowlisting: boolean;
+  rbac: boolean;
+  customRateLimits: boolean;
+  customAlerts: boolean;
+  auditLogs: boolean;
+  auditLogsRetentionDays: number;
+  auditLogStreams: boolean;
+  auditLogStreamLimit: number;
+  githubOrgSync: boolean;
+  samlSSO: boolean;
+  enforceGoogleSSO: boolean;
+  hsm: boolean;
+  oidcSSO: boolean;
+  secretAccessInsights: boolean;
+  scim: boolean;
+  ldap: boolean;
+  groups: boolean;
   status: null;
   trial_end: null;
-  has_used_trial: true;
-  secretApproval: false;
-  secretRotation: false;
-  instanceUserManagement: false;
-  externalKms: false;
+  has_used_trial: boolean;
+  secretApproval: boolean;
+  secretRotation: boolean;
+  instanceUserManagement: boolean;
+  externalKms: boolean;
   rateLimits: {
     readLimit: number;
     writeLimit: number;
     secretsLimit: number;
   };
-  kmsPqc: false;
-  enforceMfa: false;
-  projectTemplates: false;
-  kmip: false;
-  gateway: false;
-  gatewayPool: false;
+  kmsPqc: boolean;
+  enforceMfa: boolean;
+  projectTemplates: boolean;
+  kmip: boolean;
+  gateway: boolean;
+  gatewayPool: boolean;
   pamSlackNotifications: boolean;
-  secretScanning: false;
-  enterpriseSecretSyncs: false;
-  enterpriseAppConnections: false;
-  machineIdentityAuthTemplates: false;
-  fips: false;
-  eventSubscriptions: false;
-  secretShareExternalBranding: false;
-  honeyTokens: false;
-  honeyTokenLimit: 0;
-  secretsBrokering: true;
-  agentVaultByoS3: false;
+  secretScanning: boolean;
+  enterpriseSecretSyncs: boolean;
+  enterpriseAppConnections: boolean;
+  machineIdentityAuthTemplates: boolean;
+  fips: boolean;
+  eventSubscriptions: boolean;
+  secretShareExternalBranding: boolean;
+  honeyTokens: boolean;
+  honeyTokenLimit: number;
+  secretsBrokering: boolean;
+  agentVaultByoS3: boolean;
   secretSyncLimit: null;
   maxPamAccounts: null;
 
   // PKI / Cert Manager
-  pkiAcme: true;
+  pkiAcme: boolean;
   pkiEst: boolean;
-  pkiScep: false;
-  pkiPqc: false;
+  pkiScep: boolean;
+  pkiPqc: boolean;
   // caCrl defaults on, so self-hosted OSS keeps it; the License Server's free-plan default is what
   // withholds it on cloud.
   caCrl: boolean;
-  pkiOcsp: false;
-  pkiEnterpriseCaIntegrations: false;
-  pkiExternalIntermediateCa: false;
-  pkiDiscovery: false;
-  pkiEnterpriseAlerting: false;
-  pkiApprovals: false;
-  pkiSyncs: false;
-  pkiLegacyTemplates: false;
-  pkiCodeSigning: false;
+  pkiOcsp: boolean;
+  pkiEnterpriseCaIntegrations: boolean;
+  pkiExternalIntermediateCa: boolean;
+  pkiDiscovery: boolean;
+  pkiEnterpriseAlerting: boolean;
+  pkiApprovals: boolean;
+  pkiSyncs: boolean;
+  pkiLegacyTemplates: boolean;
+  pkiCodeSigning: boolean;
   // maxCas covers every CA type, maxInternalCas covers INTERNAL only. Both enforced, whichever binds
   // first. Typed number | null rather than the literal null the flags above use, so consumers can
   // name the limit in an error without casting.
@@ -150,8 +150,8 @@ export type TFeatureSet = {
   certManager: null;
   secretsTemporaryAccess: null;
   enterprisePamAccount: null;
-  crossProjectSecretSharing: false;
-  secretsFolderRbac: false;
+  crossProjectSecretSharing: boolean;
+  secretsFolderRbac: boolean;
 };
 
 export type TOrgPlanDTO = {
@@ -168,10 +168,10 @@ export enum LicenseType {
 
 export type TLicenseKeyConfig =
   | {
-      isValid: false;
+      isValid: boolean;
     }
   | {
-      isValid: true;
+      isValid: boolean;
       licenseKey: string;
       type: LicenseType;
     };

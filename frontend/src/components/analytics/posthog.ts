@@ -10,6 +10,7 @@ export const isPostHogEnabled = () =>
   typeof window !== "undefined" &&
   envConfig.ENV === "production" &&
   envConfig.TELEMETRY_CAPTURING_ENABLED &&
+  !envConfig.ENTERPRISE_BYPASS &&
   Boolean(envConfig.POSTHOG_API_KEY);
 
 export const initPostHog = (): PostHog | undefined => {
