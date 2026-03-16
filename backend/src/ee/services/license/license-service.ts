@@ -22,7 +22,7 @@ import { OrgPermissionBillingActions, OrgPermissionSubjects } from "../permissio
 import { TPermissionServiceFactory } from "../permission/permission-service-types";
 import { BillingPlanRows, BillingPlanTableHead } from "./licence-enums";
 import { TLicenseDALFactory } from "./license-dal";
-import { getDefaultOnPremFeatures, getLicenseKeyConfig, setupLicenseRequestWithStore } from "./license-fns";
+import { getAllFeaturesEnabled, getDefaultOnPremFeatures, getLicenseKeyConfig, setupLicenseRequestWithStore } from "./license-fns";
 import {
   InstanceType,
   LicenseType,
@@ -49,7 +49,7 @@ import {
 type TLicenseServiceFactoryDep = {
   envConfig: Pick<
     TEnvConfig,
-    "LICENSE_SERVER_URL" | "LICENSE_SERVER_KEY" | "LICENSE_KEY" | "LICENSE_KEY_OFFLINE" | "INTERNAL_REGION" | "SITE_URL"
+    "LICENSE_SERVER_URL" | "LICENSE_SERVER_KEY" | "LICENSE_KEY" | "LICENSE_KEY_OFFLINE" | "INTERNAL_REGION" | "SITE_URL" | "ENTERPRISE_BYPASS"
   >;
   orgDAL: Pick<TOrgDALFactory, "findRootOrgDetails" | "countAllOrgMembers" | "findById">;
   permissionService: Pick<TPermissionServiceFactory, "getOrgPermission">;
@@ -128,6 +128,14 @@ export const licenseServiceFactory = ({
 
   const init = async () => {
     try {
+      if (envConfig.ENTERPRISE_BYPASS) {
+        onPremFeatures = getAllFeaturesEnabled();
+        instanceType = InstanceType.EnterpriseOnPremOffline;
+        isValidLicense = true;
+        logger.info("Enterprise bypass enabled — all features unlocked");
+        return;
+      }
+
       if (envConfig.LICENSE_SERVER_KEY) {
         const token = await licenseServerCloudApi.refreshLicense();
         if (token) instanceType = InstanceType.Cloud;

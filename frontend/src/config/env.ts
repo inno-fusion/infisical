@@ -32,5 +32,11 @@ export const envConfig = {
     // by the release workflow. Strip any leading "v" so consumers can prefix it
     // themselves without producing "vv0.159.15".
     return import.meta.env.VITE_INFISICAL_PLATFORM_VERSION?.replace(/^v/i, "");
+  },
+  get ENTERPRISE_BYPASS() {
+    return (
+      window?.__INFISICAL_RUNTIME_ENV__?.ENTERPRISE_BYPASS === "1" ||
+      import.meta.env.VITE_ENTERPRISE_BYPASS === "1"
+    );
   }
 };
