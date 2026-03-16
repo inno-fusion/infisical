@@ -3,7 +3,6 @@ import { TEntitlementsResponse } from "@app/services/license-client/license-clie
 
 export enum InstanceType {
   OnPrem = "self-hosted",
-  // Self-hosted online license: features are resolved from License Server v2.
   EnterpriseOnPrem = "enterprise-self-hosted",
   EnterpriseOnPremOffline = "enterprise-self-hosted-offline",
   Cloud = "cloud"
@@ -21,8 +20,6 @@ export type TOfflineLicense = {
   issuedAt: string;
   expiresAt: string | null;
   terminatesAt: string | null;
-  // v1 (or absent) offline licenses carry the legacy feature-flag set directly; version 2 licenses
-  // carry License Server v2 entitlements, which we project into the same feature shape.
   version?: number;
   features: TFeatureSet;
   entitlements?: TEntitlementsResponse;
@@ -36,103 +33,95 @@ export type TOrgSeatUsage = {
 export type TFeatureSet = {
   _id: null;
   slug: string | null;
-  // True when features are sourced from an offline (air-gapped) license; the billing UI renders a
-  // read-only offline banner instead of the live billing surface.
   isOffline?: boolean;
-  tier: -1;
+  tier: number;
   workspaceLimit: null;
   workspacesUsed: number;
-  dynamicSecret: false;
+  dynamicSecret: boolean;
   memberLimit: null;
   identityLimit: null;
   enforceIdentityLimit?: boolean;
-  subOrganization: false;
+  subOrganization: boolean;
   environmentLimit: null;
-  environmentsUsed: 0;
-  secretVersioning: true;
-  pitRecovery: false;
-  ipAllowlisting: false;
-  rbac: false;
-  customRateLimits: false;
-  customAlerts: false;
-  auditLogs: false;
-  auditLogsRetentionDays: 0;
-  auditLogStreams: false;
-  auditLogStreamLimit: 3;
-  githubOrgSync: false;
-  samlSSO: false;
-  enforceGoogleSSO: false;
-  hsm: false;
-  oidcSSO: false;
-  secretAccessInsights: false;
-  scim: false;
-  ldap: false;
-  groups: false;
-  status: null;
-  trial_end: null;
-  has_used_trial: true;
-  secretApproval: false;
-  secretRotation: false;
-  instanceUserManagement: false;
-  externalKms: false;
+  environmentsUsed: number;
+  secretVersioning: boolean;
+  pitRecovery: boolean;
+  ipAllowlisting: boolean;
+  rbac: boolean;
+  customRateLimits: boolean;
+  customAlerts: boolean;
+  auditLogs: boolean;
+  auditLogsRetentionDays: number;
+  auditLogStreams: boolean;
+  auditLogStreamLimit: number;
+  githubOrgSync: boolean;
+  samlSSO: boolean;
+  enforceGoogleSSO: boolean;
+  hsm: boolean;
+  oidcSSO: boolean;
+  secretAccessInsights: boolean;
+  scim: boolean;
+  ldap: boolean;
+  groups: boolean;
+  status: string | null;
+  trial_end: number | null;
+  has_used_trial: boolean;
+  secretApproval: boolean;
+  secretRotation: boolean;
+  instanceUserManagement: boolean;
+  externalKms: boolean;
   rateLimits: {
     readLimit: number;
     writeLimit: number;
     secretsLimit: number;
   };
-  kmsPqc: false;
-  enforceMfa: false;
-  projectTemplates: false;
-  kmip: false;
-  gateway: false;
-  gatewayPool: false;
+  kmsPqc: boolean;
+  enforceMfa: boolean;
+  projectTemplates: boolean;
+  kmip: boolean;
+  gateway: boolean;
+  gatewayPool: boolean;
   pamSlackNotifications: boolean;
-  secretScanning: false;
-  enterpriseSecretSyncs: false;
-  enterpriseAppConnections: false;
-  machineIdentityAuthTemplates: false;
-  fips: false;
-  eventSubscriptions: false;
-  secretShareExternalBranding: false;
-  honeyTokens: false;
-  honeyTokenLimit: 0;
-  secretsBrokering: true;
+  secretScanning: boolean;
+  enterpriseSecretSyncs: boolean;
+  enterpriseAppConnections: boolean;
+  machineIdentityAuthTemplates: boolean;
+  fips: boolean;
+  eventSubscriptions: boolean;
+  secretShareExternalBranding: boolean;
+  honeyTokens: boolean;
+  honeyTokenLimit: number;
+  secretsBrokering: boolean;
   secretSyncLimit: null;
   maxPamAccounts: null;
 
   // PKI / Cert Manager
-  pkiAcme: true;
+  pkiAcme: boolean;
   pkiEst: boolean;
-  pkiScep: false;
-  pkiPqc: false;
-  // caCrl defaults on, so self-hosted OSS keeps it; the License Server's free-plan default is what
-  // withholds it on cloud.
+  pkiScep: boolean;
+  pkiPqc: boolean;
   caCrl: boolean;
-  pkiEnterpriseCaIntegrations: false;
-  pkiExternalIntermediateCa: false;
-  pkiDiscovery: false;
-  pkiEnterpriseAlerting: false;
-  pkiApprovals: false;
-  pkiSyncs: false;
-  pkiLegacyTemplates: false;
-  pkiCodeSigning: false;
-  // maxCas covers every CA type, maxInternalCas covers INTERNAL only. Both enforced, whichever binds
-  // first. Typed number | null rather than the literal null the flags above use, so consumers can
-  // name the limit in an error without casting.
+  pkiEnterpriseCaIntegrations: boolean;
+  pkiExternalIntermediateCa: boolean;
+  pkiDiscovery: boolean;
+  pkiEnterpriseAlerting: boolean;
+  pkiApprovals: boolean;
+  pkiSyncs: boolean;
+  pkiLegacyTemplates: boolean;
+  pkiCodeSigning: boolean;
   maxCas: number | null;
   maxInternalCas: number | null;
   maxCertificates: number | null;
-  // Wildcards have no separate boolean gate: 0 means the plan does not include them at all, which is
-  // how the free tier withholds them. A wildcard certificate counts against maxCertificates too.
   maxWildcardCertificates: number | null;
   maxSansPerCertificate: number | null;
 
+  // Product-gating fields use null to avoid imposing product-specific caps.
   pam: null;
   certManager: null;
   secretsTemporaryAccess: null;
   enterprisePamAccount: null;
-  crossProjectSecretSharing: false;
-  secretsFolderRbac: false;
+  crossProjectSecretSharing: boolean;
+  secretsFolderRbac: boolean;
 };
 
 export type TOrgPlanDTO = {
@@ -143,7 +132,6 @@ export type TOrgPlanDTO = {
 
 export enum LicenseType {
   Offline = "offline",
-  // Self-hosted online license key; resolves entitlements from License Server v2.
   Online = "online"
 }
 

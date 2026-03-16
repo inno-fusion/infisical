@@ -481,6 +481,7 @@ const envSchema = z
     LICENSE_KEY: zpStr(z.string().optional()),
     LICENSE_KEY_OFFLINE: zpStr(z.string().optional()),
     LICENSE_SERVER_V2_SERVICE_KEY: zpStr(z.string().optional()),
+    ENTERPRISE_BYPASS: zodStrBool.default("false"),
 
     // GENERIC
     STANDALONE_MODE: z

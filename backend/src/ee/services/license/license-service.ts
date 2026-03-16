@@ -19,7 +19,7 @@ import { TProjectDALFactory } from "@app/services/project/project-dal";
 
 import { TPermissionServiceFactory } from "../permission/permission-service-types";
 import { TLicenseDALFactory } from "./license-dal";
-import { getDefaultOnPremFeatures, getLicenseKeyConfig } from "./license-fns";
+import { getAllFeaturesEnabled, getDefaultOnPremFeatures, getLicenseKeyConfig } from "./license-fns";
 import {
   InstanceType,
   LicenseType,
@@ -31,7 +31,10 @@ import {
 } from "./license-types";
 
 type TLicenseServiceFactoryDep = {
-  envConfig: Pick<TEnvConfig, "LICENSE_KEY" | "LICENSE_KEY_OFFLINE" | "LICENSE_SERVER_V2_SERVICE_KEY" | "isCloud">;
+  envConfig: Pick<
+    TEnvConfig,
+    "LICENSE_KEY" | "LICENSE_KEY_OFFLINE" | "LICENSE_SERVER_V2_SERVICE_KEY" | "isCloud" | "ENTERPRISE_BYPASS"
+  >;
   orgDAL: Pick<TOrgDALFactory, "findRootOrgDetails">;
   permissionService: Pick<TPermissionServiceFactory, "getOrgPermission">;
   licenseDAL: Pick<TLicenseDALFactory, "countBillableOrgActors">;
@@ -92,6 +95,13 @@ export const licenseServiceFactory = ({
 
   const init = async () => {
     try {
+      if (envConfig.ENTERPRISE_BYPASS) {
+        onPremFeatures = getAllFeaturesEnabled();
+        instanceType = InstanceType.EnterpriseOnPremOffline;
+        logger.info("Enterprise bypass enabled - all features unlocked");
+        return;
+      }
+
       if (envConfig.LICENSE_SERVER_V2_SERVICE_KEY) {
         instanceType = InstanceType.Cloud;
         logger.info(`Instance type: ${InstanceType.Cloud}`);
