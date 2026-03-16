@@ -102,13 +102,13 @@ To opt into telemetry, you can set "TELEMETRY_ENABLED=true" within the environme
 `);
   }
 
-  const postHog = appCfg.TELEMETRY_ENABLED
+  const postHog = appCfg.TELEMETRY_ENABLED && !appCfg.ENTERPRISE_BYPASS
     ? new PostHog(appCfg.POSTHOG_PROJECT_API_KEY, { host: appCfg.POSTHOG_HOST })
     : undefined;
 
   // used for email marketting email sending purpose
   const sendLoopsEvent = async (email: string, firstName?: string, lastName?: string) => {
-    if (appCfg.isProductionMode && appCfg.LOOPS_API_KEY) {
+    if (appCfg.isProductionMode && appCfg.LOOPS_API_KEY && !appCfg.ENTERPRISE_BYPASS) {
       try {
         await request.post(
           "https://app.loops.so/api/v1/events/send",
