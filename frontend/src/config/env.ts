@@ -29,5 +29,11 @@ export const envConfig = {
 
   get PLATFORM_VERSION() {
     return import.meta.env.VITE_INFISICAL_PLATFORM_VERSION;
+  },
+  get ENTERPRISE_BYPASS() {
+    return (
+      window?.__INFISICAL_RUNTIME_ENV__?.ENTERPRISE_BYPASS === "1" ||
+      import.meta.env.VITE_ENTERPRISE_BYPASS === "1"
+    );
   }
 };
