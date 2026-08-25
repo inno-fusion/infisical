@@ -53,7 +53,9 @@ export type TFeatureSet = {
   workspacesUsed: number;
   dynamicSecret: boolean;
   memberLimit: null;
+  membersUsed: number;
   identityLimit: null;
+  identitiesUsed: number;
   enforceIdentityLimit?: boolean;
   subOrganization: boolean;
   environmentLimit: null;

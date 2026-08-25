@@ -65,6 +65,7 @@ export const getAllFeaturesEnabled = (): TFeatureSet => ({
   environmentsUsed: 0,
   identityLimit: null,
   identitiesUsed: 0,
+  enforceIdentityLimit: false,
   dynamicSecret: true,
   secretVersioning: true,
   pitRecovery: true,
@@ -103,12 +104,14 @@ export const getAllFeaturesEnabled = (): TFeatureSet => ({
   pkiAcme: true,
   pkiScep: true,
   pkiPqc: true,
+  pkiCodeSigning: true,
   kmsPqc: true,
   enforceMfa: true,
   projectTemplates: true,
   kmip: true,
   gateway: true,
   gatewayPool: true,
+  pamSlackNotifications: true,
   sshHostGroups: true,
   secretScanning: true,
   enterpriseSecretSyncs: true,
@@ -120,7 +123,17 @@ export const getAllFeaturesEnabled = (): TFeatureSet => ({
   pkiLegacyTemplates: true,
   secretShareExternalBranding: true,
   honeyTokens: true,
-  honeyTokenLimit: 999999
+  honeyTokenLimit: 999999,
+  secretsBrokering: true,
+  secretSyncLimit: null,
+  maxInternalCas: null,
+  maxPamAccounts: null,
+  // product gating
+  pam: null,
+  certManager: null,
+  secretsTemporaryAccess: null,
+  enterprisePamAccount: null,
+  crossProjectSecretSharing: false
 });
 
 export const getDefaultOnPremFeatures = (): TFeatureSet => ({
