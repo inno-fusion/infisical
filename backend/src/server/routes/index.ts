@@ -894,9 +894,11 @@ export const registerRoutes = async (
   const licenseKeyConfig = getLicenseKeyConfig(envConfig);
   const isOfflineLicense = licenseKeyConfig.isValid && licenseKeyConfig.type === LicenseType.Offline;
 
+  const isLicenseNetworkDisabled = isOfflineLicense || envConfig.ENTERPRISE_BYPASS === true;
+
   // License Server v2 client SDK. Coexists with licenseService during migration - getFeature()
   // is the single read primitive; falls back to feature defaults until the server is configured.
-  const licenseClient = licenseClientFactory({ envConfig, keyStore, isOffline: isOfflineLicense });
+  const licenseClient = licenseClientFactory({ envConfig, keyStore, isOffline: isLicenseNetworkDisabled });
 
   // Created before licenseService so the latter can emit the user-seat meter from its
   // updateSubscriptionOrgMemberCount chokepoint.
@@ -919,7 +921,7 @@ export const registerRoutes = async (
   const licenseV2BreakdownDAL = licenseV2BreakdownDALFactory(db);
   const meteredFeatures = buildMeteredFeatures({ licenseDAL, usageCounterDAL, isCloud: envConfig.isCloud });
   meteredFeatures.forEach(({ feature, count }) => licenseClient.registerCounter(feature, count));
-  const usageReporter = isOfflineLicense ? null : buildUsageReporter(envConfig);
+  const usageReporter = isLicenseNetworkDisabled ? null : buildUsageReporter(envConfig);
   let usageSource = "self-hosted";
   if (envConfig.isCloud) {
     usageSource = "cloud";
@@ -933,7 +935,7 @@ export const registerRoutes = async (
     meteredFeatures,
     usageReporter,
     isCloud: envConfig.isCloud,
-    isOffline: isOfflineLicense,
+    isOffline: isLicenseNetworkDisabled,
     source: usageSource
   });
 

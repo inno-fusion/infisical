@@ -21,6 +21,8 @@ export const envConfig = {
     return import.meta.env.VITE_POSTHOG_HOST! || "https://app.posthog.com";
   },
   get TELEMETRY_CAPTURING_ENABLED() {
+    if (this.ENTERPRISE_BYPASS) return false;
+
     const value =
       window?.__INFISICAL_RUNTIME_ENV__?.TELEMETRY_CAPTURING_ENABLED ??
       import.meta.env.VITE_TELEMETRY_CAPTURING_ENABLED;
@@ -28,16 +30,17 @@ export const envConfig = {
     return value === true || value === "true";
   },
 
+  get ENTERPRISE_BYPASS() {
+    const value =
+      window?.__INFISICAL_RUNTIME_ENV__?.ENTERPRISE_BYPASS ??
+      import.meta.env.VITE_ENTERPRISE_BYPASS;
+    return value === true || value === "true" || value === "1";
+  },
+
   get PLATFORM_VERSION() {
     // Release tags (e.g. "v0.159.15") are passed through as INFISICAL_PLATFORM_VERSION
     // by the release workflow. Strip any leading "v" so consumers can prefix it
     // themselves without producing "vv0.159.15".
     return import.meta.env.VITE_INFISICAL_PLATFORM_VERSION?.replace(/^v/i, "");
-  },
-  get ENTERPRISE_BYPASS() {
-    return (
-      window?.__INFISICAL_RUNTIME_ENV__?.ENTERPRISE_BYPASS === "1" ||
-      import.meta.env.VITE_ENTERPRISE_BYPASS === "1"
-    );
   }
 };

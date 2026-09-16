@@ -50,8 +50,7 @@ export const getLicenseKeyConfig = (
   return { isValid: false };
 };
 
-export const getAllFeaturesEnabled = (): TFeatureSet => ({
-  ...getDefaultOnPremFeatures(),
+const ENTERPRISE_FEATURE_OVERRIDES: Partial<TFeatureSet> = {
   slug: "enterprise",
   dynamicSecret: true,
   pitRecovery: true,
@@ -115,7 +114,7 @@ export const getAllFeaturesEnabled = (): TFeatureSet => ({
   maxSansPerCertificate: null,
   crossProjectSecretSharing: true,
   secretsFolderRbac: true
-});
+};
 
 export const getDefaultOnPremFeatures = (): TFeatureSet => ({
   _id: null,
@@ -207,6 +206,11 @@ export const getDefaultOnPremFeatures = (): TFeatureSet => ({
   enterprisePamAccount: null,
   crossProjectSecretSharing: false,
   secretsFolderRbac: false
+});
+
+export const getAllFeaturesEnabled = (): TFeatureSet => ({
+  ...getDefaultOnPremFeatures(),
+  ...ENTERPRISE_FEATURE_OVERRIDES
 });
 
 export const getEnforcedIdentityLimit = (plan: TFeatureSet): number | null => {

@@ -1,6 +1,7 @@
 import type { PostHog } from "posthog-js";
 
 import { getPostHog } from "@app/components/analytics/posthog";
+import { envConfig } from "@app/config/env";
 
 type Capturer = {
   api: PostHog | undefined;
@@ -14,6 +15,7 @@ const createCapturer = (): Capturer => {
   return {
     api,
     capture(item, properties) {
+      if (envConfig.ENTERPRISE_BYPASS || !envConfig.TELEMETRY_CAPTURING_ENABLED) return;
       try {
         api?.capture(item, properties);
       } catch (error) {
@@ -21,6 +23,7 @@ const createCapturer = (): Capturer => {
       }
     },
     identify(id, email) {
+      if (envConfig.ENTERPRISE_BYPASS || !envConfig.TELEMETRY_CAPTURING_ENABLED) return;
       try {
         api?.identify(id, {
           email
