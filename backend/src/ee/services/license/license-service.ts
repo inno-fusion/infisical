@@ -166,6 +166,11 @@ export const licenseServiceFactory = ({
   };
 
   const initializeBackgroundSync = async () => {
+    if (envConfig.ENTERPRISE_BYPASS) {
+      logger.info("Enterprise bypass enabled - license background sync disabled");
+      return undefined;
+    }
+
     if (licenseKeyConfig?.isValid && licenseKeyConfig?.type === LicenseType.Online) {
       logger.info("Setting up background sync process to refresh onPremFeatures from License Server v2");
       const job = new CronJob("*/10 * * * *", () => syncSelfHostedFeatures());

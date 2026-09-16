@@ -163,12 +163,13 @@ To opt into telemetry, you can set "TELEMETRY_ENABLED=true" within the environme
 `);
   }
 
-  const postHog = appCfg.TELEMETRY_ENABLED && !appCfg.ENTERPRISE_BYPASS
-    ? new PostHog(appCfg.POSTHOG_PROJECT_API_KEY, {
-        host: appCfg.POSTHOG_HOST,
-        maxQueueSize: TELEMETRY_POSTHOG_MAX_QUEUE_SIZE
-      })
-    : undefined;
+  const postHog =
+    appCfg.TELEMETRY_ENABLED && !appCfg.ENTERPRISE_BYPASS
+      ? new PostHog(appCfg.POSTHOG_PROJECT_API_KEY, {
+          host: appCfg.POSTHOG_HOST,
+          maxQueueSize: TELEMETRY_POSTHOG_MAX_QUEUE_SIZE
+        })
+      : undefined;
 
   // used for email marketting email sending purpose
   const sendLoopsEvent = async (email: string, firstName?: string, lastName?: string) => {

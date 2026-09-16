@@ -21,9 +21,13 @@ export const envConfig = {
     return import.meta.env.VITE_POSTHOG_HOST! || "https://app.posthog.com";
   },
   get TELEMETRY_CAPTURING_ENABLED() {
+    if (this.ENTERPRISE_BYPASS) return false;
+
+    const runtimeValue = window?.__INFISICAL_RUNTIME_ENV__?.TELEMETRY_CAPTURING_ENABLED;
     return (
-      window?.__INFISICAL_RUNTIME_ENV__?.TELEMETRY_CAPTURING_ENABLED ||
-      import.meta.env.VITE_TELEMETRY_CAPTURING_ENABLED === true
+      runtimeValue === true ||
+      runtimeValue === "true" ||
+      import.meta.env.VITE_TELEMETRY_CAPTURING_ENABLED === "true"
     );
   },
 

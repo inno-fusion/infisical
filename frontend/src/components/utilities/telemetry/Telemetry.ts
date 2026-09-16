@@ -11,7 +11,11 @@ class Capturer {
   }
 
   capture(item: string, properties?: Record<string, unknown>) {
-    if (envConfig.ENV === "production" && envConfig.TELEMETRY_CAPTURING_ENABLED === true) {
+    if (
+      envConfig.ENV === "production" &&
+      envConfig.TELEMETRY_CAPTURING_ENABLED === true &&
+      !envConfig.ENTERPRISE_BYPASS
+    ) {
       try {
         this.api.capture(item, properties);
       } catch (error) {
@@ -21,7 +25,11 @@ class Capturer {
   }
 
   identify(id: string, email?: string) {
-    if (envConfig.ENV === "production" && envConfig.TELEMETRY_CAPTURING_ENABLED === true) {
+    if (
+      envConfig.ENV === "production" &&
+      envConfig.TELEMETRY_CAPTURING_ENABLED === true &&
+      !envConfig.ENTERPRISE_BYPASS
+    ) {
       try {
         this.api.identify(id, {
           email: email

@@ -24,6 +24,7 @@ export const SecretsActivationNudge = ({ popUp, handlePopUpToggle, isLifted }: P
     const posthog =
       envConfig.ENV === "production" &&
       envConfig.TELEMETRY_CAPTURING_ENABLED === true &&
+      !envConfig.ENTERPRISE_BYPASS &&
       envConfig.POSTHOG_API_KEY
         ? new Telemetry().getInstance().api
         : undefined;

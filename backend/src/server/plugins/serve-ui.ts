@@ -33,9 +33,10 @@ export const registerServeUI = async (
       void res.type("application/javascript");
       const config = {
         CAPTCHA_SITE_KEY: appCfg.CAPTCHA_SITE_KEY,
-        POSTHOG_API_KEY: appCfg.POSTHOG_PROJECT_API_KEY,
-        INTERCOM_ID: appCfg.INTERCOM_ID,
-        TELEMETRY_CAPTURING_ENABLED: appCfg.TELEMETRY_ENABLED,
+        POSTHOG_API_KEY: appCfg.ENTERPRISE_BYPASS ? undefined : appCfg.POSTHOG_PROJECT_API_KEY,
+        INTERCOM_ID: appCfg.ENTERPRISE_BYPASS ? undefined : appCfg.INTERCOM_ID,
+        TELEMETRY_CAPTURING_ENABLED: appCfg.ENTERPRISE_BYPASS ? false : appCfg.TELEMETRY_ENABLED,
+        ENTERPRISE_BYPASS: appCfg.ENTERPRISE_BYPASS ? "1" : "0",
         CDN_HOST: cdnHost
       };
       // Define window.__toCdnUrl for Vite's experimental.renderBuiltUrl runtime support
