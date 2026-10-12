@@ -31,6 +31,12 @@ describe("enterprise bypass feature set", () => {
       }
     }
 
+    for (const [key, value] of Object.entries(defaults)) {
+      if (typeof value === "boolean" && key !== "has_used_trial") {
+        expect(enterprise[key as keyof typeof enterprise], key).toBe(true);
+      }
+    }
+
     expect(enterprise).toMatchObject({
       rbac: true,
       samlSSO: true,

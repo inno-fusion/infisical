@@ -96,7 +96,7 @@ export const licenseServiceFactory = ({
   const init = async () => {
     try {
       if (envConfig.ENTERPRISE_BYPASS) {
-        onPremFeatures = getAllFeaturesEnabled();
+        onPremFeatures = { ...getAllFeaturesEnabled(), isOffline: true };
         instanceType = InstanceType.EnterpriseOnPremOffline;
         logger.info("Enterprise bypass enabled - all features unlocked");
         return;

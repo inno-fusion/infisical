@@ -1,0 +1,8 @@
+Infisical fork modifications
+
+This fork retains the upstream Infisical copyright and licensing terms in
+LICENSE.upstream and backend/src/ee/LICENSE.md. The fork root LICENSE applies
+only to original material whose authors have granted those terms; it does not
+relicense upstream software, enterprise directories, or third-party dependencies.
+Enabling features through configuration does not grant rights to use or
+distribute components contrary to their original license.

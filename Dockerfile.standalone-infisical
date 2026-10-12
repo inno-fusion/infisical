@@ -280,6 +280,8 @@ ENV INTERCOM_ID=$INTERCOM_ID
 COPY --from=backend-runner /app /backend
 COPY --from=frontend-runner /app ./backend/frontend-build
 COPY --from=go-builder /go-sidecar /backend/go-sidecar
+COPY LICENSE LICENSE.upstream LICENSE.fork-notice /licenses/
+COPY backend/src/ee/LICENSE.md /licenses/Infisical-Enterprise.txt
 
 # Make export-assets script executable for CDN asset extraction
 RUN chmod +x /backend/scripts/export-assets.sh
@@ -299,9 +301,9 @@ LABEL org.opencontainers.image.title="Infisical"
 LABEL org.opencontainers.image.description="Open-source secret management platform"
 LABEL org.opencontainers.image.url="https://infisical.com"
 LABEL org.opencontainers.image.documentation="https://infisical.com/docs"
-LABEL org.opencontainers.image.source="https://github.com/Infisical/infisical"
-LABEL org.opencontainers.image.vendor="Infisical"
-LABEL org.opencontainers.image.licenses="MIT"
+LABEL org.opencontainers.image.source="https://github.com/inno-fusion/infisical"
+LABEL org.opencontainers.image.vendor="0xMetaLabs"
+LABEL org.opencontainers.image.licenses="MIT AND LicenseRef-Infisical-Enterprise"
 LABEL org.opencontainers.image.base.name="node:26.10.0-trixie-slim"
 
 # OCI Image Labels - Dynamic metadata (set via build args)

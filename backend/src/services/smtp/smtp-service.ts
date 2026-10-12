@@ -1,5 +1,5 @@
 import { render } from "@react-email/components";
-import { createTransport } from "nodemailer";
+import { createTransport, SendMailOptions } from "nodemailer";
 import SMTPTransport from "nodemailer/lib/smtp-transport";
 import React from "react";
 
@@ -63,7 +63,7 @@ import {
 } from "./emails";
 import DynamicSecretLeaseRevocationFailedTemplate from "./emails/DynamicSecretLeaseRevocationFailedTemplate";
 
-export type TSmtpConfig = SMTPTransport.Options;
+export type TSmtpConfig = SMTPTransport.Options & Pick<SendMailOptions, "from">;
 export type TSmtpAttachment = {
   filename: string;
   content: Buffer | string;

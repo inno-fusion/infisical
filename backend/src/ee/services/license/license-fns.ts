@@ -52,6 +52,7 @@ export const getLicenseKeyConfig = (
 
 const ENTERPRISE_FEATURE_OVERRIDES: Partial<TFeatureSet> = {
   slug: "enterprise",
+  subOrganization: true,
   dynamicSecret: true,
   pitRecovery: true,
   ipAllowlisting: true,
@@ -96,7 +97,9 @@ const ENTERPRISE_FEATURE_OVERRIDES: Partial<TFeatureSet> = {
   secretShareExternalBranding: true,
   honeyTokens: true,
   honeyTokenLimit: Number.MAX_SAFE_INTEGER,
+  agentVaultByoS3: true,
   pkiEst: true,
+  pkiOcsp: true,
   pkiScep: true,
   pkiPqc: true,
   pkiEnterpriseCaIntegrations: true,

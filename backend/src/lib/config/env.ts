@@ -498,7 +498,10 @@ const envSchema = z
     LICENSE_KEY: zpStr(z.string().optional()),
     LICENSE_KEY_OFFLINE: zpStr(z.string().optional()),
     LICENSE_SERVER_V2_SERVICE_KEY: zpStr(z.string().optional()),
-    ENTERPRISE_BYPASS: zodStrBool.default("false"),
+    ENTERPRISE_BYPASS: z
+      .string()
+      .default("false")
+      .transform((val) => val === "true" || val === "1"),
 
     // GENERIC
     STANDALONE_MODE: z
@@ -715,6 +718,10 @@ const envSchema = z
   })
   .transform((data) => ({
     ...data,
+    TELEMETRY_ENABLED: data.ENTERPRISE_BYPASS ? false : data.TELEMETRY_ENABLED,
+    OTEL_TELEMETRY_COLLECTION_ENABLED: data.ENTERPRISE_BYPASS ? false : data.OTEL_TELEMETRY_COLLECTION_ENABLED,
+    SHOULD_USE_DATADOG_TRACER: data.ENTERPRISE_BYPASS ? false : data.SHOULD_USE_DATADOG_TRACER,
+    DATADOG_PROFILING_ENABLED: data.ENTERPRISE_BYPASS ? false : data.DATADOG_PROFILING_ENABLED,
     SECRET_SCANNING_STUCK_SCAN_TIMEOUT: getSecretScanningStuckScanTimeout(data),
     SALT_ROUNDS: data.SALT_ROUNDS || data.BCRYPT_SALT_ROUND || 12,
     DISABLE_POSTGRES_AUDIT_LOG_STORAGE:

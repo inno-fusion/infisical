@@ -168,10 +168,10 @@ export enum LicenseType {
 
 export type TLicenseKeyConfig =
   | {
-      isValid: boolean;
+      isValid: false;
     }
   | {
-      isValid: boolean;
+      isValid: true;
       licenseKey: string;
       type: LicenseType;
     };
